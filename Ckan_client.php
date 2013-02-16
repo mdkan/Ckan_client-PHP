@@ -42,7 +42,7 @@ class Ckan_client
 	 * @var		string
 	 * @since	Version 0.1.0
 	 */
-	private $base_url = 'http://ckan.net/api/%d/';
+	private $base_url = 'http://datahub.io/api/%d/';
 
 	/**
 	 * Internal cURL object.
