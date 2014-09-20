@@ -93,7 +93,8 @@ class Ckan_client
 		'revision_register' => 'rest/revision',
 		'revision_entity' => 'rest/revision',
 		'license_list' => 'rest/licenses',
-		'package_search' => 'search/package'
+		'package_search' => 'search/package',
+		'dataset_search' => 'search/dataset'
 	);
 
 	/**
@@ -503,6 +504,36 @@ class Ckan_client
 			? urlencode($opts['downloadable']) : '0');
 		return $data = $this->make_request('GET', 
 			$this->resources['package_search'] . '?q=' . 
+			urlencode($keywords) . $q);
+	}
+
+        /**
+	 * Searches CKAN datasets.
+	 *
+	 * @access public
+	 * @param	string	Keywords to search for
+	 * @param	array	Optional. Search options.
+	 * @return	mixed	If success, search object. On fail, false.
+	 * @since	Version 0.1.0
+	 */
+	public function search_dataset($keywords, $opts = array())
+	{
+		// Gots to have keywords or there's nothing to search for.
+		// Also, $opts better be an array
+		if (0 === strlen(trim($keywords)) || FALSE === is_array($opts))
+		{
+			throw new Exception('We need keywords, yo!');
+		}
+		$q = '';
+		// Set querystring based on $opts param.
+		$q .= '&order_by=' . ((isset($opts['order_by'])) 
+			? urlencode($opts['order_by']) : 'rank');
+		$q .= '&offset=' . ((isset($opts['offset'])) 
+			? urlencode($opts['offset']) : '0');
+		$q .= '&limit=' . ((isset($opts['limit'])) 
+			? urlencode($opts['limit']) : '5');
+		return $data = $this->make_request('GET', 
+			$this->resources['dataset_search'] . '?q=' . 
 			urlencode($keywords) . $q);
 	}
 
